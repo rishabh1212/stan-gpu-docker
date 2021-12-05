@@ -35,4 +35,4 @@ STAN_CPP_OPTIMS=true
 
 # From cmdstan opencl_support.md
 CC = g++
-LDFLAGS_OPENCL= -L"$(CUDA_PATH)\lib\x64" -lOpenCL
+LDFLAGS_OPENCL= -L"$(CUDA_PATH)\lib\x64" -lOpenCl
