@@ -34,6 +34,8 @@ RUN --mount=type=cache,id=apt-dev,target=/var/cache/apt \
 RUN mkdir -p /etc/OpenCL/vendors && \
     echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 
+RUN ln -s /usr/local/cuda/lib64/libOpenCL.so.1 /usr/lib/libOpenCL.so
+
 # for visibility of docker
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
@@ -43,10 +45,14 @@ RUN python3 -m venv /home/prophet
 ENV PATH "/home/prophet/bin:$PATH"
 
 RUN python3 -m pip install --upgrade cmdstanpy[all] --no-cache-dir  && \
-    python3 -c "import cmdstanpy; cmdstanpy.install_cmdstan()"
+    python3 -c "import cmdstanpy; cmdstanpy.install_cmdstan()" && \
+    # For passing prophet tests
+    ln ./.cmdstan/cmdstan-2.28.2/stan/lib/stan_math/lib/tbb/libtbb.so.2 /usr/lib/libtbb.so.2
 
 # Rebuild with stan opencl gpu
 COPY local /root/.cmdstan/cmdstan-2.28.2/make/
 RUN cd /root/.cmdstan/cmdstan-2.28.2/ && make build
 
 COPY example.json example.py /home/prophet/
+COPY ./prophet/python/ /home/prophet/python/
+RUN cd /home/prophet/python && export STAN_BACKEND=CMDSTANPY && pip install .
