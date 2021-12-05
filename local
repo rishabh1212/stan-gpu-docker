@@ -32,7 +32,3 @@ STAN_CPP_OPTIMS=true
 
 # Adding other arbitrary C++ compiler flags
 # CXXFLAGS+= -funroll-loops
-
-# From cmdstan opencl_support.md
-CC = g++
-LDFLAGS_OPENCL= -L"$(CUDA_PATH)\lib\x64" -lOpenCl
