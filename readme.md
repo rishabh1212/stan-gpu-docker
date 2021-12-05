@@ -1,6 +1,7 @@
 ## Background
-- For many reasons realted to convenience around using stan with OPENCL
+- For many reasons realted to convenience around using stan with OPENCL on GPU
 - Easy for beginer to directly get into coding aspect without worrying about infra
+- `local` file has essential stan opencl gpu build, taken from stan-dev/cmdstan github
 
 ## Test
 ```
@@ -13,6 +14,6 @@ sudo systemctl restart docker
 
 DOCKER_BUILDKIT=1 docker build -f dockerfile-gpu . -t stan-gpu:1.0.0
 docker run --gpus all -it prophet-gpu:1.0.0
-# Testing Force compile to use opencl
+# Testing Force compile to use opencl and other tests
 python /home/prophet/example.py 1 c
 ```
